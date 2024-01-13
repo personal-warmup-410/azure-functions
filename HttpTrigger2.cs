@@ -65,7 +65,6 @@ namespace warmupb.f2
             try
             {
                 var database = cosmosClient.GetDatabase(databaseName);
-
                 var container = database.GetContainer(containerName);
                 var newUser = new
                 {
