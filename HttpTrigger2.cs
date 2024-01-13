@@ -52,12 +52,9 @@ namespace warmupb.f2
                 log.LogWarning("Name parameter is empty.");
                 return new BadRequestObjectResult("Please pass a name in the request body");
             }
-            log.LogInformation("point 3");
 
             string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
-            log.LogInformation("point 4");
             string containerName = Environment.GetEnvironmentVariable("ContainerName");
-            log.LogInformation("point 5");
 
 
             if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(containerName))
@@ -65,27 +62,18 @@ namespace warmupb.f2
                 log.LogError("Database name or container name is not set in environment variables.");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-            log.LogInformation("point 6");
             try
             {
-                log.LogInformation("point 7");
-
-                log.LogInformation($"Attempting to get database: {databaseName}");
                 var database = cosmosClient.GetDatabase(databaseName);
-                log.LogInformation("point 8");
 
-                log.LogInformation($"Attempting to get container: {containerName}");
                 var container = database.GetContainer(containerName);
-                log.LogInformation("point 9");
-                 var newUser = new
+                var newUser = new
                 {
                     id = Guid.NewGuid().ToString(),
                     users = name,
                     name = name
                 };
-                log.LogInformation($"Creating item with name: {name}");
 
-                // string usersPartitionKey = "/users";
                 // set the partition key to our single partition '/users'
                 await container.CreateItemAsync(newUser, new PartitionKey(newUser.users));
                 log.LogInformation("Item created successfully.");
