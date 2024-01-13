@@ -77,12 +77,17 @@ namespace warmupb.f2
                 log.LogInformation($"Attempting to get container: {containerName}");
                 var container = database.GetContainer(containerName);
                 log.LogInformation("point 9");
-                var item = new { id = Guid.NewGuid().ToString(), name = name };
+                 var newUser = new
+                {
+                    id = Guid.NewGuid().ToString(),
+                    users = name,
+                    name = name
+                };
                 log.LogInformation($"Creating item with name: {name}");
 
-                string usersPartitionKey = "/users";
+                // string usersPartitionKey = "/users";
                 // set the partition key to our single partition '/users'
-                await container.CreateItemAsync(item, new PartitionKey(usersPartitionKey));
+                await container.CreateItemAsync(newUser, new PartitionKey(newUser.users));
                 log.LogInformation("Item created successfully.");
 
                 return new OkObjectResult($"Item with name {name} created successfully");
