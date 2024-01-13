@@ -94,7 +94,7 @@ namespace warmupb.f2
                     log.LogError($"Inner exception: {e.InnerException.Message}");
                 }
                 // set the partition key to our single partition '/users'
-                await container.CreateItemAsync(newUser, new PartitionKey(usersPartitionKey))''
+                await container.CreateItemAsync(newUser, new PartitionKey(usersPartitionKey));
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
