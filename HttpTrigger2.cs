@@ -37,30 +37,40 @@ namespace warmupb.f2
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             var name = data?.name;
 
+            log.LogInformation("Processing payload.");
+            log.LogInformation(name);
+
             if (string.IsNullOrEmpty(name))
             {
                 log.LogWarning("Name parameter is empty.");
                 return new BadRequestObjectResult("Please pass a name in the request body");
             }
+            log.LogInformation("point 3");
 
             string databaseName = Environment.GetEnvironmentVariable("DatabaseName");
+            log.LogInformation("point 4");
             string containerName = Environment.GetEnvironmentVariable("ContainerName");
+            log.LogInformation("point 5");
+
 
             if (string.IsNullOrEmpty(databaseName) || string.IsNullOrEmpty(containerName))
             {
                 log.LogError("Database name or container name is not set in environment variables.");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-
+            log.LogInformation("point 6");
             try
             {
+                log.LogInformation("point 7");
+
                 log.LogInformation($"Attempting to get database: {databaseName}");
                 var database = cosmosClient.GetDatabase(databaseName);
+                log.LogInformation("point 8");
 
                 log.LogInformation($"Attempting to get container: {containerName}");
                 var container = database.GetContainer(containerName);
-
-                var item = new { id = Guid.NewGuid().ToString(), Name = name };
+                log.LogInformation("point 9");
+                var item = new { id = Guid.NewGuid().ToString(), name = name };
                 log.LogInformation($"Creating item with name: {name}");
 
                 await container.CreateItemAsync(item, new PartitionKey(item.id));
