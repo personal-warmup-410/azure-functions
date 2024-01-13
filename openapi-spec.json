@@ -1,0 +1,77 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Message Routing API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/routeMessage": {
+      "post": {
+        "summary": "Routes a message to the appropriate Azure Function",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MessageRequest": {
+        "type": "object",
+        "properties": {
+          "messageID": {
+            "type": "string",
+            "description": "Identifier for the message type"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "JSON object containing the data of the message"
+          }
+        },
+        "required": [
+          "messageID",
+          "data"
+        ]
+      },
+      "MessageResponse": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "Result of the operation or error message"
+          }
+        },
+        "required": [
+          "result"
+        ]
+      }
+    }
+  }
+}
+

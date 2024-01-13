@@ -19,17 +19,30 @@ namespace warmupb.f1
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            try
+            {
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                var requestObject = JsonConvert.DeserializeObject<dynamic>(requestBody);
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+                string messageID = requestObject.messageID;
+                dynamic data = requestObject.data;
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+                string name = data?.name;
 
-            return new OkObjectResult(responseMessage);
+                if (string.IsNullOrEmpty(name))
+                {
+                    log.LogWarning("Name parameter is empty.");
+                    return new BadRequestObjectResult("Please pass a name in the data object of the request body.");
+                }
+
+                string responseMessage = $"Hello, {name}. This HTTP triggered function executed successfully.";
+                return new OkObjectResult(responseMessage);
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error processing request: {ex.Message}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }
