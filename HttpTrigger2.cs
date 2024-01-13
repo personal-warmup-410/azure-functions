@@ -81,6 +81,7 @@ namespace warmupb.f2
                 log.LogInformation($"Creating item with name: {name}");
 
                 await container.CreateItemAsync(item, new PartitionKey(item.id));
+                string usersPartitionKey = "/users"
                 log.LogInformation("Item created successfully.");
 
                 return new OkObjectResult($"Item with name {name} created successfully");
@@ -92,6 +93,8 @@ namespace warmupb.f2
                 {
                     log.LogError($"Inner exception: {e.InnerException.Message}");
                 }
+                // set the partition key to our single partition '/users'
+                await container.CreateItemAsync(newUser, new PartitionKey(usersPartitionKey))''
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
