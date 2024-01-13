@@ -44,7 +44,7 @@ namespace warmupb.f2
                 log.LogError($"Error during deserialization: {ex.Message}");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
-
+            string name = data?.name;
 
             if (string.IsNullOrEmpty(name))
             {
