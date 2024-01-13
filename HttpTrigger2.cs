@@ -33,10 +33,11 @@ namespace warmupb.f2
         {
             log.LogInformation("C# HTTP trigger function started processing a request.");
 
+            dynamic data;
             try
             {
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                dynamic data = JsonConvert.DeserializeObject(requestBody);
+                data = JsonConvert.DeserializeObject(requestBody);
                 log.LogInformation("Deserialization successful.");
             }
             catch (Exception ex)
