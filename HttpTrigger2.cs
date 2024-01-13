@@ -38,7 +38,6 @@ namespace warmupb.f2
             var name = data?.name;
 
             log.LogInformation("Processing payload.");
-            log.LogInformation(name);
 
             if (string.IsNullOrEmpty(name))
             {
