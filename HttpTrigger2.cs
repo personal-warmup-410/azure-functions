@@ -81,7 +81,7 @@ namespace warmupb.f2
                 log.LogInformation($"Creating item with name: {name}");
 
                 await container.CreateItemAsync(item, new PartitionKey(item.id));
-                string usersPartitionKey = "/users"
+                string usersPartitionKey = "/users";
                 log.LogInformation("Item created successfully.");
 
                 return new OkObjectResult($"Item with name {name} created successfully");
