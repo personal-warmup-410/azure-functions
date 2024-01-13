@@ -33,11 +33,18 @@ namespace warmupb.f2
         {
             log.LogInformation("C# HTTP trigger function started processing a request.");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            var name = data?.name;
+            try
+            {
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject(requestBody);
+                log.LogInformation("Deserialization successful.");
+            }
+            catch (Exception ex)
+            {
+                log.LogError($"Error during deserialization: {ex.Message}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
 
-            log.LogInformation("Processing payload.");
 
             if (string.IsNullOrEmpty(name))
             {
